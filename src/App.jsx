@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Confetti from 'react-confetti'
 import './App.css'
 
@@ -9,6 +9,26 @@ function App() {
     B: { x: 0, y: 0, scattered: false },
     C: { x: 0, y: 0, scattered: false }
   })
+
+  // Jamaican flag colors for confetti
+  const confettiColors = ['#009B3A', '#FED100', '#000000']
+
+  useEffect(() => {
+    if (answered) {
+      // Play celebration sound
+      const celebrationSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3')
+      celebrationSound.volume = 0.5
+      celebrationSound.play().catch(err => console.log('Audio play failed:', err))
+
+      // Play reggae music after a short delay
+      setTimeout(() => {
+        const reggaeMusic = new Audio('https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3')
+        reggaeMusic.volume = 0.3
+        reggaeMusic.loop = true
+        reggaeMusic.play().catch(err => console.log('Music play failed:', err))
+      }, 1000)
+    }
+  }, [answered])
 
   const handleHover = (option) => {
     if (!answered) {
@@ -29,7 +49,13 @@ function App() {
 
   return (
     <div className="app-container">
-      {answered && <Confetti numberOfPieces={500} recycle={false} />}
+      {answered && (
+        <Confetti 
+          numberOfPieces={500} 
+          recycle={false}
+          colors={confettiColors}
+        />
+      )}
       
       {!answered ? (
         <div className="question-container">
@@ -87,11 +113,19 @@ function App() {
         <div className="celebration">
           <h1 className="correct-text">Correct, You Are!</h1>
           <h2 className="birthday-text">Happy Birthday Dad! 🎉</h2>
-          <img 
-            src="https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif" 
-            alt="Dancing cat"
-            className="dancing-cat"
-          />
+          <div className="jamaica-celebration">
+            <img 
+              src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2dvdm1mbGRieTQ3MWwzd2tkcHpjeGNwYXVjbXR0OGgxMHVjbGJjaCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/LGBKlgMCKQbkDKcG4t/giphy.gif" 
+              alt="Happy Birthday"
+              className="celebration-gif"
+            />
+            <img 
+              src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3d2ZtYjhneXdrMm4xODlheGptaG5tODRudW9za3g3NDZudHN4Ymo2eSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/UmfIdBpyFlKhr6BM93/giphy.gif" 
+              alt="Jamaica"
+              className="celebration-gif"
+            />
+          </div>
+          <div className="jamaica-flag"></div>
         </div>
       )}
     </div>
